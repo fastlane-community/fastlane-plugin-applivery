@@ -1,15 +1,13 @@
-lane :test do
-  desc "Generate an enterprise build and upload it to Applivery"
-  lane :applivery_test do
-    gym(
-      scheme: "YOUR_APP_SCHEME", 
-      export_method: 'enterprise')  #enterprise or ad-hoc
-    applivery(
-      app_id: "YOUR_APP_ID",
-      api_key: "YOUR_APP_SECRET",
-      name: "YOUR_BUILD_NAME",
-      notes: "Uploaded with fastlane plugin",
-      tags: "fastlane",
-      build_path: "YOUR_APP_SCHEME.ipa")
-  end
+desc "Generate an enterprise build and upload it to Applivery"
+lane :applivery_test do
+  gym(
+    scheme: "YOUR_APP_SCHEME", 
+    export_method: 'enterprise')  #enterprise or ad-hoc
+  applivery(
+    app_id: "YOUR_APP_ID",
+    api_key: "YOUR_APP_SECRET",
+    name: "YOUR_BUILD_NAME",
+    notes: "Uploaded with fastlane plugin",
+    tags: "fastlane",
+    build_path: "YOUR_APP_SCHEME.ipa")
 end
