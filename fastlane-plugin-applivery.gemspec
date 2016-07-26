@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-applivery'
   spec.version       = Fastlane::Applivery::VERSION
   spec.author        = %q{Alejandro Jimenez}
-  spec.email         = %q{alejandro.jimenez@gigigo.com}
+  spec.email         = %q{a.j.agudo@gmail.com}
 
   spec.summary       = %q{Upload new build to Applivery}
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-applivery"
+  spec.homepage      = "https://github.com/applivery/fastlane-applivery-plugin"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
