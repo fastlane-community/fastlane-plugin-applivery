@@ -9,15 +9,15 @@ module Fastlane
         tags = params[:tags]
         build_path = params[:build_path]
 
-        command = "curl \"https://dashboard.applivery.com/api/builds\" \
-        -H \"Authorization: #{api_key}\" \
-        -F app='#{app_id}' \
-        -F versionName='#{name}' \
-        -F notes='#{notes}' \
-        -F notify='true' \
-        -F os='ios' \
-        -F tags='#{tags}' \
-        -F package=@'#{build_path}'"
+        command = "curl \"https://dashboard.applivery.com/api/builds\""
+        command += " -H \"Authorization: #{api_key}\""
+        command += " -F app='#{app_id}'"
+        command += " -F versionName='#{name}'"
+        command += " -F notes='#{notes}'"
+        command += " -F notify='true'"
+        command += " -F os='ios'"
+        command += " -F tags='#{tags}'"
+        command += " -F package=@'#{build_path}'"
 
         UI.message(command)
         Actions.sh(command)
