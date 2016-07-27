@@ -9,13 +9,23 @@ module Fastlane
         tags = params[:tags]
         build_path = params[:build_path]
 
+        platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
+
+        if platform == :ios or platform.nil?
+          os = "ios"
+        end
+
+        if platform == :android
+          os = "android"
+        end
+
         command = "curl \"https://dashboard.applivery.com/api/builds\""
         command += " -H \"Authorization: #{api_key}\""
         command += " -F app='#{app_id}'"
         command += " -F versionName='#{name}'"
         command += " -F notes='#{notes}'"
         command += " -F notify='true'"
-        command += " -F os='ios'"
+        command += " -F os=#{os}"
         command += " -F tags='#{tags}'"
         command += " -F package=@'#{build_path}'"
 
