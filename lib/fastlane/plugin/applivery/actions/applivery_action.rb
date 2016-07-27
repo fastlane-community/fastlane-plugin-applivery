@@ -9,20 +9,9 @@ module Fastlane
         tags = params[:tags]
         build_path = params[:build_path]
 
-        UI.message("Starting plugin...")
-        UI.message("App id:  \"#{app_id}\"")
-        UI.message("Api key:  \"#{api_key}\"")
-        UI.message("Build name:  \"#{name}\"")
-        UI.message("Build notes:  \"#{notes}\"")
-        UI.message("Build tags:  \"#{tags}\"")
-        UI.message("Build path:  \"#{build_path}\"")
-
         command = "curl \"https://dashboard.applivery.com/api/builds\" -H \"Authorization:\"#{api_key}\"\" -F app=\"#{app_id}\" -F versionName=\"#{name}\" -F notes=\"#{notes}\" -F notify=\"true\" -F os=\"ios\" -F tags=\"#{tags}\" -F package=@\"#{build_path}\""
-
-        Actions.sh("pwd")
+       
         Actions.sh(command)
-
-
       end
 
       def self.description
