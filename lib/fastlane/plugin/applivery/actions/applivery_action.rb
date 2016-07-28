@@ -21,15 +21,14 @@ module Fastlane
 
         command = "curl \"https://dashboard.applivery.com/api/builds\""
         command += " -H \"Authorization: #{api_key}\""
-        command += " -F app='#{app_id}'"
-        command += " -F versionName='#{name}'"
-        command += " -F notes='#{notes}'"
-        command += " -F notify='true'"
+        command += " -F app=\"#{app_id}\""
+        command += " -F versionName=\"#{name}\""
+        command += " -F notes=\"#{notes}\""
+        command += " -F notify=true"
         command += " -F os=#{os}"
-        command += " -F tags='#{tags}'"
-        command += " -F package=@'#{build_path}'"
+        command += " -F tags=\"#{tags}\""
+        command += " -F package=@\"#{build_path}\""
 
-        UI.message(command)
         Actions.sh(command)
       end
 
