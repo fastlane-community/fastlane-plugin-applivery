@@ -8,6 +8,7 @@ module Fastlane
         notes = params[:notes]
         tags = params[:tags]
         build_path = params[:build_path]
+        notify = params[:notify]
 
         platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
 
@@ -24,7 +25,7 @@ module Fastlane
         command += " -F app=\"#{app_id}\""
         command += " -F versionName=\"#{name}\""
         command += " -F notes=\"#{notes}\""
-        command += " -F notify=true"
+        command += " -F notify=#{notify}"
         command += " -F os=#{os}"
         command += " -F tags=\"#{tags}\""
         command += " -F package=@\"#{build_path}\""
@@ -43,40 +44,48 @@ module Fastlane
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(key: :app_id,
-                                  env_name: "APPLIVERY_APP_ID",
-                               description: "Your application identifier",
-                                  optional: false,
-                                      type: String),
+            env_name: "APPLIVERY_APP_ID",
+            description: "Your application identifier",
+            optional: false,
+            type: String),
 
           FastlaneCore::ConfigItem.new(key: :api_key,
-                                  env_name: "APPLIVERY_API_KEY",
-                               description: "Your developer key",
-                                  optional: false,
-                                      type: String),
+            env_name: "APPLIVERY_API_KEY",
+            description: "Your developer key",
+            optional: false,
+            type: String),
 
           FastlaneCore::ConfigItem.new(key: :name,
-                                  env_name: "APPLIVERY_BUILD_NAME",
-                               description: "Your build name",
-                                  optional: false,
-                                      type: String),
+            env_name: "APPLIVERY_BUILD_NAME",
+            description: "Your build name",
+            optional: false,
+            type: String),
 
           FastlaneCore::ConfigItem.new(key: :notes,
-                                  env_name: "APPLIVERY_BUILD_NOTES",
-                               description: "Your build notes",
-                                  optional: false,
-                                      type: String),
+            env_name: "APPLIVERY_BUILD_NOTES",
+            description: "Your build notes",
+            default_value: "Uploaded automatically with fastlane plugin",
+            optional: true,
+            type: String),
 
           FastlaneCore::ConfigItem.new(key: :tags,
-                                  env_name: "APPLIVERY_BUILD_TAGS",
-                               description: "Your build tags",
-                                  optional: false,
-                                      type: String),
+            env_name: "APPLIVERY_BUILD_TAGS",
+            description: "Your build tags",
+            optional: true,
+            type: String),
 
           FastlaneCore::ConfigItem.new(key: :build_path,
-                                  env_name: "APPLIVERY_BUILD_PATH",
-                               description: "Your build path",
-                                  optional: false,
-                                      type: String)
+            env_name: "APPLIVERY_BUILD_PATH",
+            description: "Your build path",
+            default_value: Actions.lane_context[SharedValues::IPA_OUTPUT_PATH],
+            optional: true,
+            type: String),
+
+          FastlaneCore::ConfigItem.new(key: :notify,
+            env_name: "APPLIVERY_NOTIFY",
+            description: "Send an email to your users",
+            default_value: true,
+            optional: true)
         ]
       end
 
