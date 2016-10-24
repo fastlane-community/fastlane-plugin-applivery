@@ -10,6 +10,7 @@ module Fastlane
         build_path = params[:build_path]
         notify = params[:notify]
 
+
         platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
 
         if platform == :ios or platform.nil?
@@ -28,6 +29,7 @@ module Fastlane
         command += " -F notify=#{notify}"
         command += " -F os=#{os}"
         command += " -F tags=\"#{tags}\""
+        command += " -F deployer=fastlane"
         command += " -F package=@\"#{build_path}\""
 
         Actions.sh(command)
