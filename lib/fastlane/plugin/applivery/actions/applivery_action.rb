@@ -9,7 +9,10 @@ module Fastlane
         tags = params[:tags]
         build_path = params[:build_path]
         notify = params[:notify]
-
+        gitBranch = Actions.git_branch
+        commitHash = Actions.sh('git rev-parse --short HEAD')
+        gitMessage = Actions.last_git_commit_message
+        gitRepositoryURL = Actions.sh('git config --get remote.origin.url')
 
         platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
 
@@ -30,6 +33,10 @@ module Fastlane
         command += " -F os=#{os}"
         command += " -F tags=\"#{tags}\""
         command += " -F deployer=fastlane"
+        command += " -F gitBranch=\"#{gitBranch}\""
+        command += " -F gitCommit=\"#{commitHash}\""
+        command += " -F gitMessage=\"#{gitMessage}\""
+        command += " -F gitRepositoryURL=\"#{gitRepositoryURL}\""
         command += " -F package=@\"#{build_path}\""
 
         Actions.sh(command)
