@@ -10,16 +10,17 @@ module Fastlane
         build_path = params[:build_path]
         notify = params[:notify]
         gitBranch = Actions.git_branch
-        commitHash = Actions.sh('git rev-parse --short HEAD')
+        gitCommit = Actions.sh('git rev-parse --short HEAD')
         gitMessage = Actions.last_git_commit_message
         gitRepositoryURL = Actions.sh('git config --get remote.origin.url')
+        gitTag = Actions.sh('git describe --abbrev=0 --tags')
+        gitTagCommit = Actions.sh("git rev-list -n 1 --abbrev-commit #{gitTag}")
+        integrationNumber = ENV["XCS_INTEGRATION_NUMBER"]
 
         platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
-
         if platform == :ios or platform.nil?
           os = "ios"
-        end
-
+        end 
         if platform == :android
           os = "android"
         end
@@ -34,8 +35,14 @@ module Fastlane
         command += " -F tags=\"#{tags}\""
         command += " -F deployer=fastlane"
         command += " -F gitBranch=\"#{gitBranch}\""
-        command += " -F gitCommit=\"#{commitHash}\""
+        command += " -F gitCommit=\"#{gitCommit}\""
         command += " -F gitMessage=\"#{gitMessage}\""
+        if gitTagCommit == gitCommit
+          command += " -F gitTag=\"#{gitTag}\""
+        end
+        if !integrationNumber.nil?
+          command += " -F buildNumber=\"#{integrationNumber}\""
+        end
         command += " -F gitRepositoryURL=\"#{gitRepositoryURL}\""
         command += " -F package=@\"#{build_path}\""
 
