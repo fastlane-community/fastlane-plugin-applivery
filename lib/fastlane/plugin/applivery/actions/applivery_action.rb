@@ -1,6 +1,7 @@
 module Fastlane
   module Actions
     class AppliveryAction < Action
+
       def self.run(params)
         app_id = params[:app_id]
         api_key = params[:api_key]
@@ -9,16 +10,7 @@ module Fastlane
         tags = params[:tags]
         build_path = params[:build_path]
         notify = params[:notify]
-
-        platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
-
-        if platform == :ios or platform.nil?
-          os = "ios"
-        end
-
-        if platform == :android
-          os = "android"
-        end
+        os = Helper::AppliveryHelper.platform
 
         command = "curl \"https://dashboard.applivery.com/api/builds\""
         command += " -H \"Authorization: #{api_key}\""
@@ -28,7 +20,10 @@ module Fastlane
         command += " -F notify=#{notify}"
         command += " -F os=#{os}"
         command += " -F tags=\"#{tags}\""
+        command += " -F deployer=fastlane"
         command += " -F package=@\"#{build_path}\""
+        command += Helper::AppliveryHelper.add_integration_number
+        command += Helper::AppliveryHelper.add_git_params
 
         Actions.sh(command)
       end
