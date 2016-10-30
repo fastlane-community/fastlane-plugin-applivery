@@ -1,6 +1,7 @@
 module Fastlane
   module Actions
     class AppliveryAction < Action
+
       def self.run(params)
         app_id = params[:app_id]
         api_key = params[:api_key]
@@ -9,21 +10,7 @@ module Fastlane
         tags = params[:tags]
         build_path = params[:build_path]
         notify = params[:notify]
-        gitBranch = Actions.git_branch
-        gitCommit = Actions.sh('git rev-parse --short HEAD')
-        gitMessage = Actions.last_git_commit_message
-        gitRepositoryURL = Actions.sh('git config --get remote.origin.url')
-        gitTag = Actions.sh('git describe --abbrev=0 --tags')
-        gitTagCommit = Actions.sh("git rev-list -n 1 --abbrev-commit #{gitTag}")
-        integrationNumber = ENV["XCS_INTEGRATION_NUMBER"]
-
-        platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
-        if platform == :ios or platform.nil?
-          os = "ios"
-        end 
-        if platform == :android
-          os = "android"
-        end
+        os = Helper::AppliveryHelper.platform
 
         command = "curl \"https://dashboard.applivery.com/api/builds\""
         command += " -H \"Authorization: #{api_key}\""
@@ -34,17 +21,9 @@ module Fastlane
         command += " -F os=#{os}"
         command += " -F tags=\"#{tags}\""
         command += " -F deployer=fastlane"
-        command += " -F gitBranch=\"#{gitBranch}\""
-        command += " -F gitCommit=\"#{gitCommit}\""
-        command += " -F gitMessage=\"#{gitMessage}\""
-        if gitTagCommit == gitCommit
-          command += " -F gitTag=\"#{gitTag}\""
-        end
-        if !integrationNumber.nil?
-          command += " -F buildNumber=\"#{integrationNumber}\""
-        end
-        command += " -F gitRepositoryURL=\"#{gitRepositoryURL}\""
         command += " -F package=@\"#{build_path}\""
+        command += Helper::AppliveryHelper.add_integration_number
+        command += Helper::AppliveryHelper.add_git_params
 
         Actions.sh(command)
       end
