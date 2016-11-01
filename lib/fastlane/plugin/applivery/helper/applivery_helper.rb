@@ -31,19 +31,13 @@ module Fastlane
           gitBranch = Actions.git_branch
           gitCommit = Actions.sh('git rev-parse --short HEAD')
           gitMessage = Actions.last_git_commit_message
-          gitRepositoryURL = Actions.sh('git config --get remote.origin.url')
-          gitTag = Actions.sh('git describe --abbrev=0 --tags')
-          gitTagCommit = Actions.sh("git rev-list -n 1 --abbrev-commit #{gitTag}")
           
           command += " -F gitBranch=\"#{gitBranch}\""
           command += " -F gitCommit=\"#{gitCommit}\""
           command += " -F gitMessage=\"#{gitMessage}\""
-          command += " -F gitRepositoryURL=\"#{gitRepositoryURL}\""
-          if gitTagCommit == gitCommit
-            command += " -F gitTag=\"#{gitTag}\""
-          end
+          command += self.add_git_remote
+          command += self.add_git_tag
         end
-
         return command
       end
 
@@ -54,6 +48,25 @@ module Fastlane
           command += " -F buildNumber=\"#{integrationNumber}\""
         end
         return command
+      end
+
+      def self.add_git_tag
+        gitTag = Actions.sh('git describe --abbrev=0 --tags')
+        gitTagCommit = Actions.sh("git rev-list -n 1 --abbrev-commit #{gitTag}")
+        gitCommit = Actions.sh('git rev-parse --short HEAD')
+        if gitTagCommit == gitCommit
+            return " -F gitTag=\"#{gitTag}\""
+        end
+        return ""
+      rescue
+        return ""
+      end
+
+      def self.add_git_remote
+        gitRepositoryURL = Actions.sh('git config --get remote.origin.url')
+        return " -F gitRepositoryURL=\"#{gitRepositoryURL}\""
+      rescue
+        return ""
       end
 
     end
