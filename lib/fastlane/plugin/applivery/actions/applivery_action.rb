@@ -90,7 +90,8 @@ module Fastlane
             env_name: "APPLIVERY_NOTIFY",
             description: "Send an email to your users",
             default_value: true,
-            optional: true)
+            optional: true,
+            is_string: false)
         ]
       end
 
@@ -101,6 +102,20 @@ module Fastlane
         [:ios, :android].include?(platform)
         true
       end
+
+      def self.category
+        :beta
+      end
+
+      def self.example_code
+        [
+          'applivery(
+            app_id: "568fe2b5b036c6e10a2c0e92",
+            api_key: "3324a7b1d1851f2cbda8e81aabeb899d2994c226",
+            name: "TestApp")'
+        ]
+      end
+
     end
   end
 end
