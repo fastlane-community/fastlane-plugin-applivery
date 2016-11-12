@@ -28,6 +28,16 @@ module Fastlane
         Actions.sh(command)
       end
 
+      def self.build_path
+        platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
+
+        if platform == :ios
+          return Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
+        else
+          return Actions.lane_context[Actions::SharedValues::GRADLE_APK_OUTPUT_PATH]
+        end
+      end
+
       def self.description
         "Upload new build to Applivery"
       end
@@ -72,7 +82,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :build_path,
             env_name: "APPLIVERY_BUILD_PATH",
             description: "Your build path",
-            default_value: Actions.lane_context[SharedValues::IPA_OUTPUT_PATH],
+            default_value: self.build_path,
             optional: true,
             type: String),
 
