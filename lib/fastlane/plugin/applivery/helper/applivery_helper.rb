@@ -17,6 +17,18 @@ module Fastlane
         end
       end
 
+      def self.add_integration_number
+        integrationNumber = ENV["XCS_INTEGRATION_NUMBER"] # XCode Server 
+        command = ""
+        if !integrationNumber.nil?
+          command += " -F buildNumber=\"#{integrationNumber}\""
+        end
+        return command
+      end
+
+
+      ### GIT Methods ###
+
       def self.is_git?
         Actions.sh('git rev-parse HEAD')
         return true
@@ -37,15 +49,6 @@ module Fastlane
           command += " -F gitMessage=\"#{gitMessage}\""
           command += self.add_git_remote
           command += self.add_git_tag
-        end
-        return command
-      end
-
-      def self.add_integration_number
-        integrationNumber = ENV["XCS_INTEGRATION_NUMBER"] # XCode Server 
-        command = ""
-        if !integrationNumber.nil?
-          command += " -F buildNumber=\"#{integrationNumber}\""
         end
         return command
       end

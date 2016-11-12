@@ -28,6 +28,16 @@ module Fastlane
         Actions.sh(command)
       end
 
+      def self.build_path
+        platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
+
+        if platform == :ios
+          return Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
+        else
+          return Actions.lane_context[Actions::SharedValues::GRADLE_APK_OUTPUT_PATH]
+        end
+      end
+
       def self.description
         "Upload new build to Applivery"
       end
@@ -72,7 +82,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :build_path,
             env_name: "APPLIVERY_BUILD_PATH",
             description: "Your build path",
-            default_value: Actions.lane_context[SharedValues::IPA_OUTPUT_PATH],
+            default_value: self.build_path,
             optional: true,
             type: String),
 
@@ -80,7 +90,8 @@ module Fastlane
             env_name: "APPLIVERY_NOTIFY",
             description: "Send an email to your users",
             default_value: true,
-            optional: true)
+            optional: true,
+            is_string: false)
         ]
       end
 
@@ -91,6 +102,20 @@ module Fastlane
         [:ios, :android].include?(platform)
         true
       end
+
+      def self.category
+        :beta
+      end
+
+      def self.example_code
+        [
+          'applivery(
+            app_id: "568fe2b5b036c6e10a2c0e92",
+            api_key: "3324a7b1d1851f2cbda8e81aabeb899d2994c226",
+            name: "TestApp")'
+        ]
+      end
+
     end
   end
 end
