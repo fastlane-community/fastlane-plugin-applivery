@@ -110,9 +110,9 @@ module Fastlane
       def self.example_code
         [
           'applivery(
-            app_id: "568fe2b5b036c6e10a2c0e92",
-            api_key: "3324a7b1d1851f2cbda8e81aabeb899d2994c226",
-            name: "TestApp")'
+            app_id: "YOUR_APP_ID",
+            api_key: "YOUR_APP_SECRET",
+            name: "YOUR_BUILD_NAME")'
         ]
       end
 
