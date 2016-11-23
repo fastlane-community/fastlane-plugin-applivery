@@ -63,7 +63,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :name,
             env_name: "APPLIVERY_BUILD_NAME",
             description: "Your build name",
-            optional: false,
+            optional: true,
             type: String),
 
           FastlaneCore::ConfigItem.new(key: :notes,
