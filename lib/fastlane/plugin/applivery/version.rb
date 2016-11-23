@@ -1,5 +1,5 @@
 module Fastlane
   module Applivery
-    VERSION = "0.5"
+    VERSION = "1.0"
   end
 end
