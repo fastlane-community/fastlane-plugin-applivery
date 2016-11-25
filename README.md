@@ -19,7 +19,7 @@ With [Applivery.com](https://www.applivery.com) you can easily distribute your i
 
 If you usually use Fastlane tools to automate the most common development tasks now you can start using out Fastlane Plugin to easily deploy new iOS and Android versions of your Apps to Applivery and close your development the cycle: Build, Test & deploy like a pro!
 
-This **fastlane** plugin will also help you to have more context about the build, attaching and displaying the most relevan information: Direct link to the repository(GitHub & Bitbucket), commit hash, Branch, Tag, etc:
+This **fastlane** plugin will also help you to have more context about the build, attaching and displaying the most relevant information: Direct link to the repository(GitHub & Bitbucket), commit hash, Branch, Tag, etc:
 
 ![List of builds](http://www.applivery.com/wp-content/uploads/2016/08/BuildsList.png)
 ![Build details](http://www.applivery.com/wp-content/uploads/2016/08/BuilInfo.png)
