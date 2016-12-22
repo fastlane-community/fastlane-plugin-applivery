@@ -10,6 +10,7 @@ module Fastlane
         tags = params[:tags]
         build_path = params[:build_path]
         notify = params[:notify]
+        autoremove = params[:autoremove]
         os = Helper::AppliveryHelper.platform
 
         command = "curl \"https://dashboard.applivery.com/api/builds\""
@@ -18,6 +19,7 @@ module Fastlane
         command += " -F versionName=\"#{name}\""
         command += " -F notes=\"#{notes}\""
         command += " -F notify=#{notify}"
+        command += " -F autoremove=#{autoremove}"
         command += " -F os=#{os}"
         command += " -F tags=\"#{tags}\""
         command += " -F deployer=fastlane"
@@ -91,6 +93,13 @@ module Fastlane
             description: "Send an email to your users",
             default_value: true,
             optional: true,
+            is_string: false),
+
+          FastlaneCore::ConfigItem.new(key: :autoremove,
+            env_name: "APPLIVERY_AUTOREMOVE",
+            description: "Automatically remove your application's oldest build",
+            default_value: true,
+            optional: true,
             is_string: false)
         ]
       end
@@ -111,8 +120,7 @@ module Fastlane
         [
           'applivery(
             app_id: "YOUR_APP_ID",
-            api_key: "YOUR_APP_SECRET",
-            name: "YOUR_BUILD_NAME")'
+            api_key: "YOUR_APP_SECRET")'
         ]
       end
 
