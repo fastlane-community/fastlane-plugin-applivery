@@ -18,11 +18,16 @@ module Fastlane
       end
 
       def self.add_integration_number
-        integrationNumber = ENV["XCS_INTEGRATION_NUMBER"] # XCode Server 
+        xcodeIntegrationNumber = ENV["XCS_INTEGRATION_NUMBER"] # XCode Server
+        jenkinsIntegrationNumber = ENV["BUILD_NUMBER"] # Jenkins
         command = ""
-        if !integrationNumber.nil?
-          command += " -F buildNumber=\"#{integrationNumber}\""
+        
+        if !xcodeIntegrationNumber.nil?
+          command += " -F buildNumber=\"#{xcodeIntegrationNumber}\""
+        elsif !jenkinsIntegrationNumber.nil?
+          command += " -F buildNumber=\"#{jenkinsIntegrationNumber}\""
         end
+
         return command
       end
 
