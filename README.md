@@ -21,8 +21,8 @@ If you usually use Fastlane tools to automate the most common development tasks 
 
 This **fastlane** plugin will also help you to have more context about the build, attaching and displaying the most relevant information: Direct link to the repository(GitHub & Bitbucket), commit hash, Branch, Tag, etc:
 
-![List of builds](http://www.applivery.com/wp-content/uploads/2016/08/BuildsList.png)
-![Build details](http://www.applivery.com/wp-content/uploads/2016/08/BuilInfo.png)
+<!--![List of builds](http://www.applivery.com/wp-content/uploads/2016/08/BuildsList.png)-->
+<!--![Build details](http://www.applivery.com/wp-content/uploads/2016/08/BuilInfo.png)-->
 
 ## Examples
 
