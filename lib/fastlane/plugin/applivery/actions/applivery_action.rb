@@ -6,7 +6,7 @@ module Fastlane
         app_id = params[:app_id]
         api_key = params[:api_key]
         name = params[:name]
-        notes = params[:notes]
+        notes = Helper::AppliveryHelper.escape(params[:notes])
         tags = params[:tags]
         build_path = params[:build_path]
         notify = params[:notify]
