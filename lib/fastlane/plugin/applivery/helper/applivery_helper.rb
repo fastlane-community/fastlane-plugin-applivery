@@ -8,6 +8,10 @@ module Fastlane
         UI.message("Hello from the applivery plugin helper!")
       end
 
+      def self.escape(string)
+        return URI.encode(string.sub(/@/, '\@'))
+      end
+
       def self.platform
         platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
         if platform == :ios or platform.nil?
@@ -54,7 +58,7 @@ module Fastlane
           
           command += " -F gitBranch=\"#{gitBranch}\""
           command += " -F gitCommit=\"#{gitCommit}\""
-          command += " -F gitMessage=\"#{gitMessage}\""
+          command += " -F gitMessage=\"#{self.escape(gitMessage)}\""
           command += self.add_git_remote
           command += self.add_git_tag
         end
