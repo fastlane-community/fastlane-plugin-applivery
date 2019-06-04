@@ -28,11 +28,11 @@ module Fastlane
         command = ""
         
         if !xcodeIntegrationNumber.nil?
-          command += " -F buildNumber=\"#{xcodeIntegrationNumber}\""
+          command += " -F deployer.info.buildNumber=\"#{xcodeIntegrationNumber}\""
         elsif !jenkinsIntegrationNumber.nil?
-          command += " -F buildNumber=\"#{jenkinsIntegrationNumber}\""
+          command += " -F deployer.info.buildNumber=\"#{jenkinsIntegrationNumber}\""
         elsif !travisIntegrationNumber.nil?
-          command += " -F buildNumber=\"#{travisIntegrationNumber}\""
+          command += " -F deployer.info.buildNumber=\"#{travisIntegrationNumber}\""
         end
 
         return command
@@ -56,9 +56,9 @@ module Fastlane
           gitCommit = Actions.sh('git rev-parse --short HEAD')
           gitMessage = Actions.last_git_commit_message
           
-          command += " -F gitBranch=\"#{gitBranch}\""
-          command += " -F gitCommit=\"#{gitCommit}\""
-          command += " -F gitMessage=\"#{self.escape(gitMessage)}\""
+          command += " -F deployer.info.branch=\"#{gitBranch}\""
+          command += " -F deployer.info.commit=\"#{gitCommit}\""
+          command += " -F deployer.info.commitMessage=\"#{self.escape(gitMessage)}\""
           command += self.add_git_remote
           command += self.add_git_tag
         end
@@ -70,7 +70,7 @@ module Fastlane
         gitTagCommit = Actions.sh("git rev-list -n 1 --abbrev-commit #{gitTag}")
         gitCommit = Actions.sh('git rev-parse --short HEAD')
         if gitTagCommit == gitCommit
-            return " -F gitTag=\"#{gitTag}\""
+            return " -F deployer.info.tag=\"#{gitTag}\""
         end
         return ""
       rescue
@@ -79,7 +79,7 @@ module Fastlane
 
       def self.add_git_remote
         gitRepositoryURL = Actions.sh('git config --get remote.origin.url')
-        return " -F gitRepositoryURL=\"#{gitRepositoryURL}\""
+        return " -F deployer.info.repositoryUrl=\"#{gitRepositoryURL}\""
       rescue
         return ""
       end

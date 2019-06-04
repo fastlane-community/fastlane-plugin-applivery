@@ -36,8 +36,7 @@ lane :applivery_ios do
     scheme: "YOUR_APP_SCHEME",        # Your App Scheme
     export_method: 'enterprise')      # Choose between: enterprise or ad-hoc
   applivery(
-    app_id: "YOUR_APP_ID",            # Your Applivery App Id
-    api_key: "YOUR_API_KEY"           # Your Applivery API Key
+    appToken: "YOUR_APP_TOKEN"            # Your Applivery App Token
   )
 end
 ```
@@ -47,26 +46,25 @@ Next you'll find a `lane` with two steps: `gradle()` that will build the Android
 lane :applivery_android do
   gradle(task: "assembleRelease")
   applivery(
-    app_id: "YOUR_APP_ID",           # Your Applivery App Id
-    api_key: "YOUR_API_KEY"          # Your Applivery API Key
+    appToken: "YOUR_APP_TOKEN"            # Your Applivery App Token
   )
 end
 ```
 Please check out the [example `Fastfile`](fastlane/Fastfile) to see additional examples of how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`. 
 
 ## Additional Parameters
-The above examples are the most simple configuration you can have but in addition to the `app_id` and `api_key` parameters, you can add additional ones to fully customize the deployment process. They are:
+The above examples are the most simple configuration you can have but you can add additional parameters to fully customize the deployment process. They are:
 
-| Param       | Description                 | Mandatory | Values       |
-|-------------|-----------------------------|-----------|--------------|
-| `app_id`    | Applivery App ID            | YES       | string -> Available in the App details |
-| `api_key`   | Applivery API Key           | YES       | string -> Available the [Developers](https://dashboard.applivery.com/dashboard/developers) area       |
-| `name`      | Applivery Build name        | NO        | string. i.e.: "RC 1.0"       |
-| `notify`    | Notify users after deploy   | NO        | true / false |
-| `notes`     | Release notes               | NO        | string. i.e.: "Bug fixing"       |
-| `tags`      | Tags to identify the build  | NO        | string comma separated. i.e.: "RC1, QA" |
-| `autoremove`| Remove the last build       | NO        | true / false |
-| `build_path`| Build path to the APK / IPA file  | NO  | string, by default it takes the IPA/APK build path |
+| Param                    | Description                          | Mandatory | Values       |
+|--------------------------|--------------------------------------|-----------|--------------|
+| `appToken`               | Applivery App Token                  | YES       | string -> Available in the App Settings |
+| `name`                   | Applivery Build name                 | NO        | string-> i.e.: "RC 1.0"       |
+| `notifyCollaborators`    | Notify Collaborators after deploy    | NO        | booletan -> i.e.: rue / false |
+| `notifyEmployees`        | Notify Employees after deploy        | NO        | booletan -> i.e.: true / false |
+| `notifyMessage`          | Notification message                 | NO        | string -> i.e.: "Enjoy the new version!" |
+| `changelog`              | Release notes                        | NO        | string -> i.e.: "Bug fixing"       |
+| `tags`                   | Tags to identify the build           | NO        | string -> comma separated. i.e.: "RC1, QA" |
+| `build_path`             | Build path to the APK / IPA file     | NO        | string -> by default it takes the IPA/APK build path |
 
 ## Run tests for this plugin
 
