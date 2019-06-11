@@ -12,10 +12,10 @@ module Fastlane
         notify_collaborators = params[:notify_collaborators]
         notify_employees = params[:notify_employees]
 
-        command = "curl \"https://dashboard.applivery.com/api/builds\""
+        command = "curl \"https://api.applivery.io/v1/integrations/builds\""
         command += " -H \"Authorization: bearer #{app_token}\""
         command += " -F versionName=\"#{name}\""
-        command += " -F changelog=\"#{notes}\""
+        command += " -F changelog=\"#{changelog}\""
         command += " -F notifyCollaborators=#{notify_collaborators}"
         command += " -F notifyEmployees=#{notify_employees}"
         command += " -F tags=\"#{tags}\""
@@ -97,9 +97,9 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :notify_message,
             env_name: "APPLIVERY_NOTIFY_MESSAGE",
             description: "Notification message to be sent along with email notifications",
-            default_value: true,
+            default_value: "New version uploaded!",
             optional: true,
-            is_string: false),
+            type: String),
 
         ]
       end
