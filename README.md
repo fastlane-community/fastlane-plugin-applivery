@@ -30,18 +30,21 @@ Below you'll find some basic examples about how to **build** a new iOS or Androi
 
 ### iOS App build and deploy
 Next you'll find a `lane` with two steps: `gym()` that will build the iOS App and `applivery()` that will take care about the deployment.
+
 ```ruby
 lane :applivery_ios do
   gym(
     scheme: "YOUR_APP_SCHEME",        # Your App Scheme
     export_method: 'enterprise')      # Choose between: enterprise or ad-hoc
   applivery(
-    appToken: "YOUR_APP_TOKEN"            # Your Applivery App Token
+    app_token: "YOUR_APP_TOKEN"            # Your Applivery App Token
   )
 end
 ```
+
 ### Android App build and deploy
 Next you'll find a `lane` with two steps: `gradle()` that will build the Android App and `applivery()` that will take care about the deployment.
+
 ```ruby
 lane :applivery_android do
   gradle(task: "assembleRelease")
@@ -50,6 +53,7 @@ lane :applivery_android do
   )
 end
 ```
+
 Please check out the [example `Fastfile`](fastlane/Fastfile) to see additional examples of how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`. 
 
 ## Additional Parameters
@@ -57,11 +61,11 @@ The above examples are the most simple configuration you can have but you can ad
 
 | Param                    | Description                          | Mandatory | Values       |
 |--------------------------|--------------------------------------|-----------|--------------|
-| `appToken`               | Applivery App Token                  | YES       | string -> Available in the App Settings |
+| `app_token`              | Applivery App Token                  | YES       | string -> Available in the App Settings |
 | `name`                   | Applivery Build name                 | NO        | string-> i.e.: "RC 1.0"       |
-| `notifyCollaborators`    | Notify Collaborators after deploy    | NO        | booletan -> i.e.: rue / false |
-| `notifyEmployees`        | Notify Employees after deploy        | NO        | booletan -> i.e.: true / false |
-| `notifyMessage`          | Notification message                 | NO        | string -> i.e.: "Enjoy the new version!" |
+| `notify_collaborators`   | Notify Collaborators after deploy    | NO        | booletan -> i.e.: rue / false |
+| `notify_employees`       | Notify Employees after deploy        | NO        | booletan -> i.e.: true / false |
+| `notify_message`         | Notification message                 | NO        | string -> i.e.: "Enjoy the new version!" |
 | `changelog`              | Release notes                        | NO        | string -> i.e.: "Bug fixing"       |
 | `tags`                   | Tags to identify the build           | NO        | string -> comma separated. i.e.: "RC1, QA" |
 | `build_path`             | Build path to the APK / IPA file     | NO        | string -> by default it takes the IPA/APK build path |
