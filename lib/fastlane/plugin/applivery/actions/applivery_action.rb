@@ -3,27 +3,25 @@ module Fastlane
     class AppliveryAction < Action
 
       def self.run(params)
-        app_id = params[:app_id]
-        api_key = params[:api_key]
+        appToken = params[:appToken]
         name = params[:name]
-        notes = Helper::AppliveryHelper.escape(params[:notes])
+        changelog = Helper::AppliveryHelper.escape(params[:changelog])
+        notifyMessage = Helper::AppliveryHelper.escape(params[:notifyMessage])
         tags = params[:tags]
         build_path = params[:build_path]
-        notify = params[:notify]
-        autoremove = params[:autoremove]
-        os = Helper::AppliveryHelper.platform
+        notifyCollaborators = params[:notifyCollaborators]
+        notifyEmployees = params[:notifyEmployees]
 
         command = "curl \"https://dashboard.applivery.com/api/builds\""
-        command += " -H \"Authorization: #{api_key}\""
-        command += " -F app=\"#{app_id}\""
+        command += " -H \"Authorization: bearer #{appToken}\""
         command += " -F versionName=\"#{name}\""
-        command += " -F notes=\"#{notes}\""
-        command += " -F notify=#{notify}"
-        command += " -F autoremove=#{autoremove}"
-        command += " -F os=#{os}"
+        command += " -F changelog=\"#{notes}\""
+        command += " -F notifyCollaborators=#{notifyCollaborators}"
+        command += " -F notifyEmployees=#{notifyEmployees}"
         command += " -F tags=\"#{tags}\""
-        command += " -F deployer=fastlane"
-        command += " -F package=@\"#{build_path}\""
+        command += " -F notifyMessage=\"#{notifyMessage}\""
+        command += " -F build=@\"#{build_path}\""
+        command += " -F deployer.name=fastlane"
         command += Helper::AppliveryHelper.add_integration_number
         command += Helper::AppliveryHelper.add_git_params
 
@@ -41,24 +39,18 @@ module Fastlane
       end
 
       def self.description
-        "Upload new build to Applivery"
+        "Upload new iOS or Android build to Applivery"
       end
 
       def self.authors
-        ["Alejandro Jimenez"]
+        ["Alejandro Jimenez", "Cesar Trigo"]
       end
 
       def self.available_options
         [
-          FastlaneCore::ConfigItem.new(key: :app_id,
-            env_name: "APPLIVERY_APP_ID",
+          FastlaneCore::ConfigItem.new(key: :appToken,
+            env_name: "APPLIVERY_APP_TOKEN",
             description: "Your application identifier",
-            optional: false,
-            type: String),
-
-          FastlaneCore::ConfigItem.new(key: :api_key,
-            env_name: "APPLIVERY_API_KEY",
-            description: "Your developer key",
             optional: false,
             type: String),
 
@@ -68,8 +60,8 @@ module Fastlane
             optional: true,
             type: String),
 
-          FastlaneCore::ConfigItem.new(key: :notes,
-            env_name: "APPLIVERY_BUILD_NOTES",
+          FastlaneCore::ConfigItem.new(key: :changelog,
+            env_name: "APPLIVERY_BUILD_CHANGELOG",
             description: "Your build notes",
             default_value: "Uploaded automatically with fastlane plugin",
             optional: true,
@@ -88,19 +80,27 @@ module Fastlane
             optional: true,
             type: String),
 
-          FastlaneCore::ConfigItem.new(key: :notify,
-            env_name: "APPLIVERY_NOTIFY",
-            description: "Send an email to your users",
+          FastlaneCore::ConfigItem.new(key: :notifyCollaborators,
+            env_name: "APPLIVERY_NOTIFY_COLLABORATORS",
+            description: "Send an email to your App Collaborators",
             default_value: true,
             optional: true,
             is_string: false),
 
-          FastlaneCore::ConfigItem.new(key: :autoremove,
-            env_name: "APPLIVERY_AUTOREMOVE",
-            description: "Automatically remove your application's oldest build",
+          FastlaneCore::ConfigItem.new(key: :notifyEmployees,
+            env_name: "APPLIVERY_NOTIFY_EMPLOYEES",
+            description: "Send an email to your App Employees",
             default_value: true,
             optional: true,
-            is_string: false)
+            is_string: false),
+
+          FastlaneCore::ConfigItem.new(key: :notifyMessage,
+            env_name: "APPLIVERY_NOTIFY_MESSAGE",
+            description: "Notification message to be sent along with email notifications",
+            default_value: true,
+            optional: true,
+            is_string: false),
+
         ]
       end
 
@@ -119,8 +119,7 @@ module Fastlane
       def self.example_code
         [
           'applivery(
-            app_id: "YOUR_APP_ID",
-            api_key: "YOUR_APP_SECRET")'
+            appToken: "YOUR_APP_TOKEN")'
         ]
       end
 
