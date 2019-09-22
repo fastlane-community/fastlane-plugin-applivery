@@ -5,15 +5,7 @@ module Fastlane
     class AppliveryAction < Action
 
       def self.run(params)
-        app_token = params[:app_token]
-        name = params[:name]
-        changelog = params[:changelog]
-        notify_message = params[:notify_message]
-        tags = params[:tags]
         build_path = params[:build_path] ||= "NO BUILD PATH SPECIFIED"
-        notify_collaborators = params[:notify_collaborators]
-        notify_employees = params[:notify_employees]
-        build_number = Helper::AppliveryHelper.get_integration_number
         build = Faraday::UploadIO.new(build_path, 'application/octet-stream') if build_path && File.exist?(build_path)
 
         conn = Faraday.new(url: 'https://api.applivery.io') do |faraday|
@@ -28,17 +20,17 @@ module Fastlane
           req.url '/v1/integrations/builds'
           req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
           req.headers['Accept'] = 'application/json'
-          req.headers['Authorization'] = "bearer #{app_token}"
+          req.headers['Authorization'] = "bearer #{params[:app_token]}"
           request_body = {
-            changelog: changelog,
-            notifyCollaborators: notify_collaborators,
-            notifyEmployees: notify_employees,
-            notifyMessage: notify_message,
+            changelog: params[:changelog],
+            notifyCollaborators: params[:notify_collaborators],
+            notifyEmployees: params[:notify_employees],
+            notifyMessage: params[:notify_message],
             build: build,
             deployer: {
               name: "fastlane",
               info: {
-                buildNumber: build_number,
+                buildNumber: Helper::AppliveryHelper.get_integration_number,
                 branch: Helper::AppliveryHelper.git_branch,
                 commit: Helper::AppliveryHelper.git_commit,
                 commitMessage: Helper::AppliveryHelper.git_message,
@@ -47,12 +39,12 @@ module Fastlane
               } 
             }
           }
-          if !name.nil?
-            request_body[:versionName] = name
+          if !params[:name].nil?
+            request_body[:versionName] = params[:name]
           end
 
-          if !tags.nil?
-            request_body[:tags] = tags
+          if !params[:tags].nil?
+            request_body[:tags] = params[:tags]
           end
 
           req.body = request_body
