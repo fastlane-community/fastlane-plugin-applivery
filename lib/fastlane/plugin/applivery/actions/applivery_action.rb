@@ -1,3 +1,5 @@
+require 'faraday'
+
 module Fastlane
   module Actions
     class AppliveryAction < Action
@@ -5,27 +7,58 @@ module Fastlane
       def self.run(params)
         app_token = params[:app_token]
         name = params[:name]
-        changelog = Helper::AppliveryHelper.escape(params[:changelog])
-        notify_message = Helper::AppliveryHelper.escape(params[:notify_message])
+        changelog = params[:changelog]
+        notify_message = params[:notify_message]
         tags = params[:tags]
-        build_path = params[:build_path]
+        build_path = params[:build_path] ||= "NO BUILD PATH SPECIFIED"
         notify_collaborators = params[:notify_collaborators]
         notify_employees = params[:notify_employees]
+        build_number = Helper::AppliveryHelper.get_integration_number
+        build = Faraday::UploadIO.new(build_path, 'application/octet-stream') if build_path && File.exist?(build_path)
 
-        command = "curl \"https://api.applivery.io/v1/integrations/builds\""
-        command += " -H \"Authorization: bearer #{app_token}\""
-        command += " -F versionName=\"#{name}\""
-        command += " -F changelog=\"#{changelog}\""
-        command += " -F notifyCollaborators=#{notify_collaborators}"
-        command += " -F notifyEmployees=#{notify_employees}"
-        command += " -F tags=\"#{tags}\""
-        command += " -F notifyMessage=\"#{notify_message}\""
-        command += " -F build=@\"#{build_path}\""
-        command += " -F deployer.name=fastlane"
-        command += Helper::AppliveryHelper.add_integration_number
-        command += Helper::AppliveryHelper.add_git_params
+        conn = Faraday.new(url: 'https://api.applivery.io') do |faraday|
+          faraday.request :multipart
+          faraday.request :url_encoded
+          faraday.response :logger
+          faraday.adapter :net_http
+          faraday.use FaradayMiddleware::ParseJson
+        end
 
-        Actions.sh(command)
+        response = conn.post do |req|
+          req.url '/v1/integrations/builds'
+          req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+          req.headers['Accept'] = 'application/json'
+          req.headers['Authorization'] = "bearer #{app_token}"
+          request_body = {
+            changelog: changelog,
+            notifyCollaborators: notify_collaborators,
+            notifyEmployees: notify_employees,
+            notifyMessage: notify_message,
+            build: build,
+            deployer: {
+              name: "fastlane",
+              info: {
+                buildNumber: build_number,
+                branch: Helper::AppliveryHelper.git_branch,
+                commit: Helper::AppliveryHelper.git_commit,
+                commitMessage: Helper::AppliveryHelper.git_message,
+                repositoryUrl: Helper::AppliveryHelper.add_git_remote,
+                tag: Helper::AppliveryHelper.git_tag,
+              } 
+            }
+          }
+          if !name.nil?
+            request_body[:versionName] = name
+          end
+
+          if !tags.nil?
+            request_body[:tags] = tags
+          end
+
+          req.body = request_body
+          UI.message("Request Body: #{req.body}")
+        end
+        UI.message("Response Body: #{response.body}")
       end
 
       def self.build_path
