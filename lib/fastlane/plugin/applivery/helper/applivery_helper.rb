@@ -41,13 +41,6 @@ module Fastlane
 
       ### GIT Methods ###
 
-      def self.is_git?
-        Actions.sh('git rev-parse HEAD')
-        return true
-      rescue
-        return false
-      end
-
       def self.git_branch
         return Actions.git_branch
       rescue
@@ -55,9 +48,9 @@ module Fastlane
       end
 
       def self.git_commit
-        return Actions.sh('git rev-parse --short HEAD')
+        return `git rev-parse --short HEAD`
       rescue
-        return "commit"
+        return ""
       end
 
       def self.git_message
@@ -67,18 +60,16 @@ module Fastlane
       end
 
       def self.add_git_remote
-        return Actions.sh('git config --get remote.origin.url')
+        return `git config --get remote.origin.url`
       rescue
         return ""
       end
 
       def self.git_tag
-        gitTag = Actions.sh('git describe --abbrev=0 --tags')
-        gitTagCommit = Actions.sh("git rev-list -n 1 --abbrev-commit #{gitTag}")
-        gitCommit = Actions.sh('git rev-parse --short HEAD')
-        if gitTagCommit == gitCommit
-          return gitTag
-        end
+        gitTag = `git describe --abbrev=0 --tags`
+        gitTagCommit = `git rev-list -n 1 --abbrev-commit #{gitTag}`
+        gitCommit = `git rev-parse --short HEAD`
+        return gitTag if gitTagCommit == gitCommit
         return ""
       rescue
         return ""

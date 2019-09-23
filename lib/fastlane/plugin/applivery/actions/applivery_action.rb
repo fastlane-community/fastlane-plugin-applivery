@@ -5,15 +5,15 @@ module Fastlane
     class AppliveryAction < Action
 
       def self.run(params)
-        build_path = params[:build_path] ||= "NO BUILD PATH SPECIFIED"
+        build_path = params[:build_path]
         build = Faraday::UploadIO.new(build_path, 'application/octet-stream') if build_path && File.exist?(build_path)
 
         conn = Faraday.new(url: 'https://api.applivery.io') do |faraday|
           faraday.request :multipart
           faraday.request :url_encoded
-          faraday.response :logger
+          # faraday.response :logger
+          faraday.use FaradayMiddleware::ParseJson
           faraday.adapter :net_http
-          # faraday.use FaradayMiddleware::ParseJson
         end
 
         response = conn.post do |req|
@@ -36,21 +36,40 @@ module Fastlane
                 commitMessage: Helper::AppliveryHelper.git_message,
                 repositoryUrl: Helper::AppliveryHelper.add_git_remote,
                 tag: Helper::AppliveryHelper.git_tag,
+                triggerTimestamp: Time.now.getutc.to_i
               } 
             }
           }
-          if !params[:name].nil?
-            request_body[:versionName] = params[:name]
-          end
-
-          if !params[:tags].nil?
-            request_body[:tags] = params[:tags]
-          end
+          request_body[:versionName] = params[:name] if !params[:name].nil?
+          request_body[:tags] = params[:tags] if !params[:tags].nil?
 
           req.body = request_body
-          UI.message("Request Body: #{req.body}")
+          UI.message "Uploading to Applivery... 🛫"
+          UI.verbose("Request Body: #{req.body}")
         end
-        UI.message("Response Body: #{response.body}")
+        UI.verbose("Response Body: #{response.body}")
+        status = response.body["status"]
+        if status
+          UI.success "Build uploaded succesfully! 💪"
+        else
+          UI.error "Oops! Something went wrong.... 🔥"
+          error = response.body["error"]
+          if error
+            case error["code"]
+            when 5006
+              UI.user_error! "Upload fail. The build path seems to be wrong or file is invalid"
+            when 4004
+              UI.user_error! "The app_token is not valid. Please, go to your app settings and doble-check the integration tokens"
+            when 4002
+              UI.user_error! "The app_token is empty. Please, go to your app Settings->Integrations to generate a token"
+            else
+              UI.user_error! "Upload fail. [#{error["code"]}]: #{error["message"]}"
+            end
+          else
+            UI.crash "Upload fails unexpectedly. [#{response.status}]"
+          end
+        end
+
       end
 
       def self.build_path
