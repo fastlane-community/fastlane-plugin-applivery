@@ -13,12 +13,12 @@ module Fastlane
           faraday.request :url_encoded
           faraday.response :logger
           faraday.adapter :net_http
-          faraday.use FaradayMiddleware::ParseJson
+          # faraday.use FaradayMiddleware::ParseJson
         end
 
         response = conn.post do |req|
           req.url '/v1/integrations/builds'
-          req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+          req.headers['Content-Type'] = 'multipart/form-data'
           req.headers['Accept'] = 'application/json'
           req.headers['Authorization'] = "bearer #{params[:app_token]}"
           request_body = {
