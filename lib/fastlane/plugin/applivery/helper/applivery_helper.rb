@@ -8,10 +8,6 @@ module Fastlane
         UI.message("Hello from the applivery plugin helper!")
       end
 
-      def self.escape(string)
-        return URI.encode(string.sub(/@/, '\@'))
-      end
-
       def self.platform
         platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
         if platform == :ios or platform.nil?
@@ -73,6 +69,23 @@ module Fastlane
         return ""
       rescue
         return ""
+      end
+
+      def self.parse_error(error)
+        if error
+          case error["code"]
+          when 5006
+            UI.user_error! "Upload fail. The build path seems to be wrong or file is invalid"
+          when 4004
+            UI.user_error! "The app_token is not valid. Please, go to your app settings and doble-check the integration tokens"
+          when 4002
+            UI.user_error! "The app_token is empty. Please, go to your app Settings->Integrations to generate a token"
+          else
+            UI.user_error! "Upload fail. [#{error["code"]}]: #{error["message"]}"
+          end
+        else
+          UI.crash! "Upload fails unexpectedly. [#{response.status}]"
+        end
       end
 
     end

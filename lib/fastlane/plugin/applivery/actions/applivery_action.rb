@@ -2,6 +2,11 @@ require 'faraday'
 
 module Fastlane
   module Actions
+
+    module SharedValues
+      APPLIVERY_BUILD_ID = :APPLIVERY_BUILD_ID
+    end
+
     class AppliveryAction < Action
 
       def self.run(params)
@@ -47,27 +52,14 @@ module Fastlane
           UI.message "Uploading to Applivery... 🛫"
           UI.verbose("Request Body: #{req.body}")
         end
-        UI.verbose("Response Body: #{response.body}")
+        UI.verbose "Response Body: #{response.body}"
         status = response.body["status"]
+        Actions.lane_context[SharedValues::APPLIVERY_BUILD_ID] = response.body["data"]["id"]
         if status
           UI.success "Build uploaded succesfully! 💪"
         else
           UI.error "Oops! Something went wrong.... 🔥"
-          error = response.body["error"]
-          if error
-            case error["code"]
-            when 5006
-              UI.user_error! "Upload fail. The build path seems to be wrong or file is invalid"
-            when 4004
-              UI.user_error! "The app_token is not valid. Please, go to your app settings and doble-check the integration tokens"
-            when 4002
-              UI.user_error! "The app_token is empty. Please, go to your app Settings->Integrations to generate a token"
-            else
-              UI.user_error! "Upload fail. [#{error["code"]}]: #{error["message"]}"
-            end
-          else
-            UI.crash "Upload fails unexpectedly. [#{response.status}]"
-          end
+          Helper::AppliveryHelper.parse_error(response.error)
         end
 
       end
@@ -148,6 +140,12 @@ module Fastlane
         ]
       end
 
+      def self.output
+        [
+          ['APPLIVERY_BUILD_ID', 'The id for the new build generated. You can open your build in https://dashboard.applivery.io/apps/apps/<YOUR_APP_SLUG>/builds?id=${APPLIVERY_BUILD_ID}']
+        ]
+      end
+
       def self.is_supported?(platform)
         # Adjust this if your plugin only works for a particular platform (iOS vs. Android, for example)
         # See: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
@@ -162,8 +160,7 @@ module Fastlane
 
       def self.example_code
         [
-          'applivery(
-            app_token: "YOUR_APP_TOKEN")'
+          'applivery(app_token: "YOUR_APP_TOKEN")'
         ]
       end
 
