@@ -37,8 +37,7 @@ lane :applivery_ios do
     scheme: "YOUR_APP_SCHEME",        # Your App Scheme
     export_method: 'enterprise')      # Choose between: enterprise or ad-hoc
   applivery(
-    app_token: "YOUR_APP_TOKEN"            # Your Applivery App Token
-  )
+    app_token: "YOUR_APP_TOKEN")      # Your Applivery App Token
 end
 ```
 
@@ -49,8 +48,7 @@ Next you'll find a `lane` with two steps: `gradle()` that will build the Android
 lane :applivery_android do
   gradle(task: "assembleRelease")
   applivery(
-    appToken: "YOUR_APP_TOKEN"            # Your Applivery App Token
-  )
+    appToken: "YOUR_APP_TOKEN")        # Your Applivery App Token
 end
 ```
 
@@ -69,6 +67,28 @@ The above examples are the most simple configuration you can have but you can ad
 | `changelog`              | Release notes                        | NO        | string -> i.e.: "Bug fixing"       |
 | `tags`                   | Tags to identify the build           | NO        | string -> comma separated. i.e.: "RC1, QA" |
 | `build_path`             | Build path to the APK / IPA file     | NO        | string -> by default it takes the IPA/APK build path |
+
+## Shared Value
+Once your build is uploaded successfuly, the new generated build ID is provided by a Shared Value `APPLIVERY_BUILD_ID` that can be accesed in your lane with `lane_context[SharedValues::APPLIVERY_BUILD_ID]`
+
+Example:
+
+```ruby
+lane :applivery_ios do
+  gym(
+    scheme: "YOUR_APP_SCHEME",        # Your App Scheme
+    export_method: 'enterprise')      # Choose between: enterprise or ad-hoc
+  applivery(
+    app_token: "YOUR_APP_TOKEN"       # Your Applivery App Token)
+  puts "BUILD ID: #{lane_context[SharedValues::APPLIVERY_BUILD_ID]}"
+end
+```
+
+You could use this id to open your build information in applivery like:
+
+```
+https://dashboard.applivery.io/apps/apps/{YOUR_APP_SLUG}/builds?id={THIS_BUILD_ID}
+```
 
 ## Run tests for this plugin
 
