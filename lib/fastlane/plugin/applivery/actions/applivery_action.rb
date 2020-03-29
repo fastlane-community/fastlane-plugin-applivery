@@ -66,11 +66,16 @@ module Fastlane
 
       def self.build_path
         platform = Actions.lane_context[Actions::SharedValues::PLATFORM_NAME]
+        ipa_path = Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
+        aab_path = Actions.lane_context[Actions::SharedValues::GRADLE_AAB_OUTPUT_PATH]
+        apk_path = Actions.lane_context[Actions::SharedValues::GRADLE_APK_OUTPUT_PATH]
 
         if platform == :ios
-          return Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
+          return ipa_path
+        elsif :android and !aab_path.blank?
+          return aab_path
         else
-          return Actions.lane_context[Actions::SharedValues::GRADLE_APK_OUTPUT_PATH]
+          return apk_path
         end
       end
 
