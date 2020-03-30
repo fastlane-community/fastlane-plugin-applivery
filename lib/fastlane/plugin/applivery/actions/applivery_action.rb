@@ -73,7 +73,7 @@ module Fastlane
 
         if platform == :ios
           return ipa_path
-        elsif :android and !aab_path.blank?
+        elsif :android and !aab_path.nil?
           return aab_path
         else
           return apk_path
