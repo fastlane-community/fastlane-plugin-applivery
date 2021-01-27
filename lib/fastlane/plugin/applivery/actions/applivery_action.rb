@@ -143,6 +143,12 @@ module Fastlane
             default_value: "New version uploaded!",
             optional: true,
             type: String),
+          
+          FastlaneCore::ConfigItem.new(key: :filter,
+            env_name: "APPLIVERY_FILTER",
+            description: "List of groups that will be notified",
+            optional: true,
+            type: Array),
 
         ]
       end
