@@ -48,7 +48,7 @@ Next you'll find a `lane` with two steps: `gradle()` that will build the Android
 lane :applivery_android do
   gradle(task: "assembleRelease")
   applivery(
-    appToken: "YOUR_APP_TOKEN")        # Your Applivery App Token
+    app_token: "YOUR_APP_TOKEN")        # Your Applivery App Token
 end
 ```
 
