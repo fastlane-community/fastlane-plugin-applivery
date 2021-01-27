@@ -35,7 +35,7 @@ Next you'll find a `lane` with two steps: `gym()` that will build the iOS App an
 lane :applivery_ios do
   gym(
     scheme: "YOUR_APP_SCHEME",        # Your App Scheme
-    export_method: 'enterprise')      # Choose between: enterprise or ad-hoc
+    export_method: 'enterprise')      # Choose between: enterprise or ad-hoc`
   applivery(
     app_token: "YOUR_APP_TOKEN")      # Your Applivery App Token
 end
@@ -61,11 +61,12 @@ The above examples are the most simple configuration you can have but you can ad
 |--------------------------|--------------------------------------|-----------|--------------|
 | `app_token`              | Applivery App Token                  | YES       | string -> Available in the App Settings |
 | `name`                   | Applivery Build name                 | NO        | string-> i.e.: "RC 1.0"       |
-| `notify_collaborators`   | Notify Collaborators after deploy    | NO        | booletan -> i.e.: rue / false |
-| `notify_employees`       | Notify Employees after deploy        | NO        | booletan -> i.e.: true / false |
+| `notify_collaborators`   | Notify Collaborators after deploy    | NO        | booletan -> i.e.: `true` / `false` |
+| `notify_employees`       | Notify Employees after deploy        | NO        | booletan -> i.e.: `true` / `false` |
 | `notify_message`         | Notification message                 | NO        | string -> i.e.: "Enjoy the new version!" |
 | `changelog`              | Release notes                        | NO        | string -> i.e.: "Bug fixing"       |
 | `tags`                   | Tags to identify the build           | NO        | string -> comma separated. i.e.: "RC1, QA" |
+| `filter`                 | List of groups that will be notified | NO        | Nested array of strings. i.e.: `[["group1", "group2"],["group3"]]` =  (grupo1 AND grupo2) OR (grupo3) |
 | `build_path`             | Build path to the APK / IPA file     | NO        | string -> by default it takes the IPA/APK build path |
 
 ## Shared Value
