@@ -7,7 +7,7 @@ platform :ios do
       scheme: "YOUR_APP_SCHEME",                  # Your App Scheme
       export_method: 'enterprise')                # Choose between: enterprise or ad-hoc
     applivery(
-      app_token: "YOUR_APP_ID",                   # Applivery App Token
+      app_token: "YOUR_APP_TOKEN",                # Applivery App Token
       #name: "My awesome build",                  # OPTIONAL: Applivery Build name
       #notify_collaborators: true,                # OPTIONAL: Notify Collaborators after deploy
       #notify_employees: true,                    # OPTIONAL: Notify Employees after deploy
@@ -25,7 +25,7 @@ platform :android do
   lane :applivery_deploy do
     gradle(task: "assembleRelease")
     applivery(
-      app_token: "YOUR_APP_ID",                   # Applivery App Token
+      app_token: "YOUR_APP_TOKEN",                # Applivery App Token
       #name: "My awesome build",                  # OPTIONAL: Applivery Build name
       #notify_collaborators: true,                # OPTIONAL: Notify Collaborators after deploy
       #notify_employees: true,                    # OPTIONAL: Notify Employees after deploy
