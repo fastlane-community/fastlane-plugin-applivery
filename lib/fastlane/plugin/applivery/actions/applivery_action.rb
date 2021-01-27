@@ -31,6 +31,7 @@ module Fastlane
             notifyCollaborators: params[:notify_collaborators],
             notifyEmployees: params[:notify_employees],
             notifyMessage: params[:notify_message],
+            filter: params[:filter],
             build: build,
             deployer: {
               name: "fastlane",
