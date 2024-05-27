@@ -13,7 +13,7 @@ module Fastlane
         build_path = params[:build_path]
         build = Faraday::UploadIO.new(build_path, 'application/octet-stream') if build_path && File.exist?(build_path)
 
-        conn = Faraday.new(url: 'https://api.applivery.io') do |faraday|
+        conn = Faraday.new(url: 'https://upload.applivery.io') do |faraday|
           faraday.request :multipart
           faraday.request :url_encoded
           # faraday.response :logger
