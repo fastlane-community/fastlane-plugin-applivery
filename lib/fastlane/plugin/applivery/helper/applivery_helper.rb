@@ -63,7 +63,7 @@ module Fastlane
 
       def self.git_tag
         gitTag = `git describe --abbrev=0 --tags`
-        gitTagCommit = `git rev-list -n 1 --abbrev-commit #{gitTag}`
+        gitTagCommit = `git rev-list -n 1 --abbrev-commit '#{gitTag.strip}'`
         gitCommit = `git rev-parse --short HEAD`
         return gitTag if gitTagCommit == gitCommit
         return ""
