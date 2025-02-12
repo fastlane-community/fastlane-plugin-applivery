@@ -88,7 +88,7 @@ end
 You could use this id to open your build information in applivery like:
 
 ```
-https://dashboard.applivery.io/apps/apps/{YOUR_APP_SLUG}/builds?id={THIS_BUILD_ID}
+https://dashboard.applivery.io/{YOUR_WORKSPACE_SLUG}/apps/{YOUR_APP_SLUG}/builds?id={THIS_BUILD_ID}
 ```
 
 ## Run tests for this plugin
