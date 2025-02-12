@@ -85,11 +85,16 @@ lane :applivery_ios do
 end
 ```
 
-You could use this id to open your build information in applivery like:
+You could use this id to open your build information in Applivery like:
 
 ```
 https://dashboard.applivery.io/{YOUR_WORKSPACE_SLUG}/apps/{YOUR_APP_SLUG}/builds?id={THIS_BUILD_ID}
 ```
+Or to create a direct link to a specific build in your enterprise store:
+```
+"https://{YOUR_WORKSPACE_SLUG}.applivery.io/#{YOUR_APP_SLUG}?os={APP_OS}&build=#{THIS_BUILD_ID}"
+```
+Where `APP_OS` can be `ios|android`.
 
 ## Run tests for this plugin
 
