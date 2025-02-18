@@ -56,7 +56,7 @@ module Fastlane
         UI.verbose "Response Body: #{response.body}"
         status = response.body["status"]
         if status
-          UI.success "Build uploaded succesfully! 💪"
+          UI.success "Build uploaded successfully! 💪"
           Actions.lane_context[SharedValues::APPLIVERY_BUILD_ID] = response.body["data"]["id"]
         else
           UI.error "Oops! Something went wrong.... 🔥"
