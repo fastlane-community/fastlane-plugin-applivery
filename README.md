@@ -61,8 +61,8 @@ The above examples are the most simple configuration you can have but you can ad
 |--------------------------|--------------------------------------|-----------|--------------|
 | `app_token`              | Applivery App Token                  | YES       | string -> Available in the App Settings |
 | `name`                   | Applivery Build name                 | NO        | string-> i.e.: "RC 1.0"       |
-| `notify_collaborators`   | Notify Collaborators after deploy    | NO        | booletan -> i.e.: `true` / `false` |
-| `notify_employees`       | Notify Employees after deploy        | NO        | booletan -> i.e.: `true` / `false` |
+| `notify_collaborators`   | Notify Collaborators after deploy    | NO        | boolean -> i.e.: `true` / `false` |
+| `notify_employees`       | Notify Employees after deploy        | NO        | boolean -> i.e.: `true` / `false` |
 | `notify_message`         | Notification message                 | NO        | string -> i.e.: "Enjoy the new version!" |
 | `changelog`              | Release notes                        | NO        | string -> i.e.: "Bug fixing"       |
 | `tags`                   | Tags to identify the build           | NO        | string -> comma separated. i.e.: `"RC1, QA"` |
