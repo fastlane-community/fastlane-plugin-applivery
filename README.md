@@ -61,13 +61,14 @@ The above examples are the most simple configuration you can have but you can ad
 |--------------------------|--------------------------------------|-----------|--------------|
 | `app_token`              | Applivery App Token                  | YES       | string -> Available in the App Settings |
 | `name`                   | Applivery Build name                 | NO        | string-> i.e.: "RC 1.0"       |
-| `notify_collaborators`   | Notify Collaborators after deploy    | NO        | booletan -> i.e.: `true` / `false` |
-| `notify_employees`       | Notify Employees after deploy        | NO        | booletan -> i.e.: `true` / `false` |
+| `notify_collaborators`   | Notify Collaborators after deploy    | NO        | boolean -> i.e.: `true` / `false` |
+| `notify_employees`       | Notify Employees after deploy        | NO        | boolean -> i.e.: `true` / `false` |
 | `notify_message`         | Notification message                 | NO        | string -> i.e.: "Enjoy the new version!" |
 | `changelog`              | Release notes                        | NO        | string -> i.e.: "Bug fixing"       |
 | `tags`                   | Tags to identify the build           | NO        | string -> comma separated. i.e.: `"RC1, QA"` |
 | `filter`                 | List of groups that will be notified | NO        | string -> comma separated + special chars. i.e.: `"group1,group2\|group3"` =  (grupo1 AND grupo2) OR (grupo3) |
-| `build_path`             | Build path to the APK / IPA file     | NO        | string -> by default it takes the IPA/APK build path |
+| `build_path`             | Build path to the APK/AAB/IPA file   | NO        | string -> by default it takes the IPA/APK build path |
+| `tenant`                 | Private tenant name or base domain   | NO        | string -> i.e.: `mycompany` or `mycompany-apps.com`  |
 
 ## Shared Value
 Once your build is uploaded successfuly, the new generated build ID is provided by a Shared Value `APPLIVERY_BUILD_ID` that can be accesed in your lane with `lane_context[SharedValues::APPLIVERY_BUILD_ID]`
@@ -85,10 +86,16 @@ lane :applivery_ios do
 end
 ```
 
-You could use this id to open your build information in applivery like:
+You could use this id to open your build information in Applivery like:
 
 ```
-https://dashboard.applivery.io/apps/apps/{YOUR_APP_SLUG}/builds?id={THIS_BUILD_ID}
+https://dashboard.applivery.io/{YOUR_WORKSPACE_SLUG}/apps/{YOUR_APP_SLUG}/builds?id={THIS_BUILD_ID}
+```
+
+Or to create a direct link to a specific build in your enterprise store:
+
+```
+"https://{YOUR_WORKSPACE_SLUG}.applivery.io/#{YOUR_APP_SLUG}?os={YOUR_APP_OS}&build=#{THIS_BUILD_ID}"
 ```
 
 ## Run tests for this plugin

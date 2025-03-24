@@ -17,6 +17,13 @@ module Fastlane
         end
       end
 
+      def self.get_base_domain(tenant = nil)
+        default_domain = "applivery.io"
+        return default_domain if tenant.nil? || tenant.strip.empty?
+        return tenant if tenant.include?(".")
+        return "#{tenant}.#{default_domain}"
+      end
+
       def self.get_integration_number
         xcodeIntegrationNumber = ENV["XCS_INTEGRATION_NUMBER"] # XCode Server
         jenkinsIntegrationNumber = ENV["BUILD_NUMBER"] # Jenkins

@@ -13,7 +13,10 @@ module Fastlane
         build_path = params[:build_path]
         build = Faraday::UploadIO.new(build_path, 'application/octet-stream') if build_path && File.exist?(build_path)
 
-        conn = Faraday.new(url: 'https://upload.applivery.io') do |faraday|
+        base_domain = Helper::AppliveryHelper.get_base_domain(params[:tenant])
+        upload_api_url = "https://upload.#{base_domain}"
+
+        conn = Faraday.new(url: upload_api_url) do |faraday|
           faraday.request :multipart
           faraday.request :url_encoded
           # faraday.response :logger
@@ -56,7 +59,7 @@ module Fastlane
         UI.verbose "Response Body: #{response.body}"
         status = response.body["status"]
         if status
-          UI.success "Build uploaded succesfully! 💪"
+          UI.success "Build uploaded successfully! 💪"
           Actions.lane_context[SharedValues::APPLIVERY_BUILD_ID] = response.body["data"]["id"]
         else
           UI.error "Oops! Something went wrong.... 🔥"
@@ -147,6 +150,12 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :filter,
             env_name: "APPLIVERY_FILTER",
             description: "List of groups that will be notified",
+            optional: true,
+            type: String),
+
+          FastlaneCore::ConfigItem.new(key: :tenant,
+            env_name: "APPLIVERY_TENANT",
+            description: "Your private tenant name or base domain",
             optional: true,
             type: String),
         ]
