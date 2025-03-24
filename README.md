@@ -68,6 +68,7 @@ The above examples are the most simple configuration you can have but you can ad
 | `tags`                   | Tags to identify the build           | NO        | string -> comma separated. i.e.: `"RC1, QA"` |
 | `filter`                 | List of groups that will be notified | NO        | string -> comma separated + special chars. i.e.: `"group1,group2\|group3"` =  (grupo1 AND grupo2) OR (grupo3) |
 | `build_path`             | Build path to the APK/AAB/IPA file   | NO        | string -> by default it takes the IPA/APK build path |
+| `api_url`                | Your private tenant API URL          | NO        | string -> Example: https://api.applivery-mycompany.com |
 
 ## Shared Value
 Once your build is uploaded successfuly, the new generated build ID is provided by a Shared Value `APPLIVERY_BUILD_ID` that can be accesed in your lane with `lane_context[SharedValues::APPLIVERY_BUILD_ID]`
