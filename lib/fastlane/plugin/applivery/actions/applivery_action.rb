@@ -13,7 +13,8 @@ module Fastlane
         build_path = params[:build_path]
         build = Faraday::UploadIO.new(build_path, 'application/octet-stream') if build_path && File.exist?(build_path)
 
-        conn = Faraday.new(url: 'https://upload.applivery.io') do |faraday|
+        api_url = params[:api_url]
+        conn = Faraday.new(url: api_url) do |faraday|
           faraday.request :multipart
           faraday.request :url_encoded
           # faraday.response :logger
@@ -79,6 +80,10 @@ module Fastlane
         else
           return apk_path
         end
+      end
+
+      def self.api_url
+        return 'https://upload.applivery.io'
       end
 
       def self.description
@@ -147,6 +152,13 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :filter,
             env_name: "APPLIVERY_FILTER",
             description: "List of groups that will be notified",
+            optional: true,
+            type: String),
+
+          FastlaneCore::ConfigItem.new(key: :api_url,
+            env_name: "APPLIVERY_API_URL",
+            description: "Your private tenant API URL",
+            default_value: self.api_url,
             optional: true,
             type: String),
         ]
